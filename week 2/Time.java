@@ -1,45 +1,49 @@
+package KK;
+
+import java.util.Scanner;
+
 public class Time {
     int hour;
     int minute;
     int second;
-
-    public Time(int hour, int minute, int second){
-        if(hour < 24 && hour >= 0 && minute < 60 && minute >= 0 && second < 60 && second >= 0){
-            this.hour = hour;
-            this.minute = minute;
-            this.second = second;
+    String res = "";
+    public Time(int hour,int minute,int second){
+        this.hour=hour;
+        this.minute=minute;
+        this.second=second;
+    };
+    public String toUniversal() {
+        if(hour>23){
+            hour=hour%24;
         }
+        if(minute>59){
+            minute=minute%60;
+        }
+        if(second>59){
+            second=second%60;
+        }
+        return hour+":"+minute+":"+second;
     }
-
-    public void add(Time t){
-        this.hour = t.hour;
-        this.minute = t.minute;
-        this.second = t.second;
-    }
-
-    public String toUniversal(){
-        return String.format("%02d:%02d:%02d", hour, minute, second);
-    }
-
-    public String toStandart(){
-        String res;
-        int h = hour;
-        if(hour > 11){
-            if(h != 12)
-                h++;
-            return String.format("%02d:%02d:%02d PM", h%13, minute, second);
+    public String toStandard(){
+        hour=hour%24;
+        minute=minute%60;
+        second=second%60;
+        if(hour<=12){
+            return hour+":"+minute+":"+second+":"+"AM";
         }else{
-            if(h == 0)
-                h = 12;
-            return String.format("%02d:%02d:%02d AM",h, minute, second );
+            hour=hour-12;
+            if(hour<10)
+                return "0"+hour+":"+minute+":"+second+":"+"PM";
+            return hour+":"+minute+":"+second+":"+"PM";
         }
     }
-
-    public static void main(String [] args){
-        Time t = new Time(13,00,00);
-        System.out.println(t.toStandart());
-        System.out.println(t.toUniversal());
-        Time t2 = new Time(12, 15, 18);
-        t.add(t2);
+    public static void main(String[] args){
+        Scanner sc=new Scanner(System.in);
+        int a=sc.nextInt();
+        int b=sc.nextInt();
+        int c=sc.nextInt();
+        Time t=new Time(a,b,c);
+        System.out.println("Universal: "+t.toUniversal());//prints"23:05:06"
+        System.out.println("Standard: "+t.toStandard());//prints"11:05:06PM"
     }
 }
